@@ -9,7 +9,7 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        $data = Berita::all();
+        $data = Berita::paginate(5);
         return view('admin.dashboard', compact('data'));
     }
 

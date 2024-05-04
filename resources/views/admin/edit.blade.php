@@ -43,7 +43,7 @@
                             @enderror
 
                             @if($berita->gambar)
-                                <img src="{{ asset('images/' . $berita->gambar) }}" alt="Gambar Berita" class="mt-2">
+                                <img src="{{ asset('images/' . $berita->gambar) }}" alt="Gambar Berita" class="mt-2 object-contain max-w-full h-auto" style="max-height: 200px;">
                             @endif
                         </div>
 
