@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// })->name('welcome');
-
 Route::get('/', [adminController::class, 'showDashboard'])->name('welcome');
 
 Route::get('/dashboard', function () {
@@ -35,12 +30,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::delete('/admin/berita/{berita}', [BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/berita/{berita}', [BeritaController::class, 'show'])->name('detail.berita');
+    Route::get('/berita/{berita}', [BeritaController::class, 'show'])->middleware('verified')->name('detail.berita');
 });
 
 require __DIR__.'/auth.php';
