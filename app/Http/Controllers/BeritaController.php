@@ -68,6 +68,14 @@ class BeritaController extends Controller
             $imageName = time() . '.' . $request->gambar->extension();
             $request->gambar->move(public_path('images'), $imageName);
 
+            // Delete previous photo if exists
+            if ($berita->gambar) {
+                $previousImage = public_path('images') . '/' . $berita->gambar;
+                if (file_exists($previousImage)) {
+                    unlink($previousImage);
+                }
+            }
+
             $validation['gambar'] = $imageName;
         }
 
@@ -83,6 +91,14 @@ class BeritaController extends Controller
 
     public function destroy(Berita $berita)
     {
+        // Delete photo if exists
+        if ($berita->gambar) {
+            $imagePath = public_path('images') . '/' . $berita->gambar;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $data = $berita->delete();
         if ($data) {
             session()->flash('success', 'Berita berhasil dihapus');
