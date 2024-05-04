@@ -9,8 +9,16 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        $data = Berita::paginate(5);
+        $data = Berita::latest()->paginate(5);
+        $title = 'Delete User!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
         return view('admin.dashboard', compact('data'));
+    }
+
+    public function show(Berita $berita)
+    {
+        return view('detail', compact('berita'));
     }
 
     public function create()
@@ -36,10 +44,10 @@ class BeritaController extends Controller
         $data = Berita::create($validation);
         if ($data) {
             session()->flash('success', 'Berita berhasil ditambahkan');
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('success', 'Berita berhasil di tambahkan!');;
         } else {
             session()->flash('error', 'Berita gagal ditambahkan');
-            return redirect()->route('admin.berita.create');
+            return redirect()->route('admin.berita.create')->with('error', 'Berita gagal ditambahkan');;
         }
     }
 
@@ -66,7 +74,7 @@ class BeritaController extends Controller
         $data = $berita->update($validation);
         if ($data) {
             session()->flash('success', 'Berita berhasil diubah');
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('success', 'Berita berhasil diperbarui!');;
         } else {
             session()->flash('error', 'Berita gagal diubah');
             return redirect()->route('admin.berita.edit', $berita);
@@ -75,6 +83,14 @@ class BeritaController extends Controller
 
     public function destroy(Berita $berita)
     {
+        // Delete the photo file if it exists
+        if ($berita->gambar) {
+            $photoPath = public_path('images') . '/' . $berita->gambar;
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+        }
+
         $data = $berita->delete();
         if ($data) {
             session()->flash('success', 'Berita berhasil dihapus');

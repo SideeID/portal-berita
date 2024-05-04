@@ -9,9 +9,7 @@ class adminController extends Controller
 {
     public function showDashboard()
     {
-        $data = Berita::all();
+        $data = Berita::latest()->get();
         return view('welcome', compact('data'));
     }
-
-
 }
