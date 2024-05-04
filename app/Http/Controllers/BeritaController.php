@@ -31,7 +31,7 @@ class BeritaController extends Controller
         $validation = $request->validate([
             'judul' => 'required',
             'isi' => 'required',
-            'gambar' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Perhatikan penambahan file()
+            'gambar' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($request->hasFile('gambar')) {
@@ -44,10 +44,10 @@ class BeritaController extends Controller
         $data = Berita::create($validation);
         if ($data) {
             session()->flash('success', 'Berita berhasil ditambahkan');
-            return redirect()->route('admin.dashboard')->with('success', 'Berita berhasil di tambahkan!');;
+            return redirect()->route('admin.dashboard')->with('toast_success', 'Berita berhasil ditambahkan!');
         } else {
             session()->flash('error', 'Berita gagal ditambahkan');
-            return redirect()->route('admin.berita.create')->with('error', 'Berita gagal ditambahkan');;
+            return redirect()->route('admin.berita.create')->with('toast_error', 'Berita gagal ditambahkan!');
         }
     }
 
@@ -74,30 +74,22 @@ class BeritaController extends Controller
         $data = $berita->update($validation);
         if ($data) {
             session()->flash('success', 'Berita berhasil diubah');
-            return redirect()->route('admin.dashboard')->with('success', 'Berita berhasil diperbarui!');;
+            return redirect()->route('admin.dashboard')->with('toast_success', 'Berita berhasil diubah!');
         } else {
             session()->flash('error', 'Berita gagal diubah');
-            return redirect()->route('admin.berita.edit', $berita);
+            return redirect()->route('admin.berita.edit', $berita)->with('toast_error', 'Berita gagal diubah!');
         }
     }
 
     public function destroy(Berita $berita)
     {
-        // Delete the photo file if it exists
-        if ($berita->gambar) {
-            $photoPath = public_path('images') . '/' . $berita->gambar;
-            if (file_exists($photoPath)) {
-                unlink($photoPath);
-            }
-        }
-
         $data = $berita->delete();
         if ($data) {
             session()->flash('success', 'Berita berhasil dihapus');
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('toast_success', 'Berita berhasil dihapus!');
         } else {
             session()->flash('error', 'Berita gagal dihapus');
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with('toast_error', 'Berita gagal dihapus!');
         }
     }
 }
