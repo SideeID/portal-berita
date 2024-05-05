@@ -10,8 +10,8 @@ class BeritaController extends Controller
     public function index()
     {
         $data = Berita::latest()->paginate(5);
-        $title = 'Delete User!';
-        $text = "Are you sure you want to delete?";
+        $title = 'Hapus Data!';
+        $text = "Apakah anda yakin ingin menghapus data ini?";
         confirmDelete($title, $text);
         return view('admin.dashboard', compact('data'));
     }
