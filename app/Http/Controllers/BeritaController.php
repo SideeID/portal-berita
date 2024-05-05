@@ -61,7 +61,7 @@ class BeritaController extends Controller
         $validation = $request->validate([
             'judul' => 'required',
             'isi' => 'required',
-            'gambar' => 'nullable|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gambar' => 'required|file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($request->hasFile('gambar')) {
